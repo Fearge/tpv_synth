@@ -1,3 +1,8 @@
+forked from: https://github.com/dzlonline/the_synth
+
+Im Rahmen des Technischen Projekts des Studiengangs Medientechnik der HAW Hamburg.
+
+
 This is a simple to use 4 polyphonic wavetable synthesizer library for Arduino UNO or other ATMEGA328P based boards.
 (may be compatible with other ATMEGA devices)
 
