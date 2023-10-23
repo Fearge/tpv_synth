@@ -45,9 +45,9 @@ void loop()
 {
   unsigned char voice;
   while(Serial.available())
-  {
+  {digitalWrite(13, LOW);
     if(parser.update(Serial.read()))  //-Feed MIDI stream to parser and execute commands
-    {
+    {digitalWrite(13, HIGH); 
       switch(parser.midi_cmd)
       {
         //*********************************************
