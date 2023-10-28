@@ -14,6 +14,7 @@
 #define NOTE_A4 46
 #define NOTE_AS4 47
 #define NOTE_B4 48
+#include <synth.h>
 
 // Create a MIDI object
 MIDI_CREATE_DEFAULT_INSTANCE();
