@@ -24,7 +24,7 @@ synth edgar;
 void setup() 
 {
   Serial.begin(19200);
-  edgar.begin(DIFF);
+  edgar.begin(CHA);
 
   edgar.setupVoice(0,SINE,60,ENVELOPE0,80,64);
   edgar.setupVoice(1,SINE,62,ENVELOPE0,100,64);
