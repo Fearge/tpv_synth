@@ -26,6 +26,7 @@
 #define ENVELOPE1 1
 #define ENVELOPE2 2
 #define ENVELOPE3 3
+#define ENVELOPE4 4
 
 #define FS 20000.0                                              //-Sample rate (NOTE: must match tables.h)
 
