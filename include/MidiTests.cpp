@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include "MIDI.h"
-#include <NoodleSynth.h>
+#include <synth.h>
 
 // Create a MIDI object
 MIDI_CREATE_DEFAULT_INSTANCE();
@@ -16,7 +16,7 @@ char waveform = SINE;
 //envelope of synth
 char envelope = ENVELOPE3;
 
-synthEngine edgar;
+synth edgar;
 
 // Define the LED pin
 const int ledPin = 13; // You can choose any digital pin
@@ -24,7 +24,7 @@ const int ledPin = 13; // You can choose any digital pin
 void setup()
 {
   MIDI.begin(MIDI_CHANNEL_OMNI); // Initialize MIDI communication
-  edgar.begin(CHA,);
+  edgar.begin();
   // set Voices
   edgar.setupVoice(0, waveform, 0, envelope, 80, 64);
   edgar.setupVoice(1, waveform, 0, envelope, 80, 64);
