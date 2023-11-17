@@ -3,6 +3,7 @@
    GNU license 2019
 */
 /////////////////////////////////////////////////////////----Libraries-------//////////////////////////////////////////////////////////////////
+#define NoodleMidiSynth
 #include <NoodleSynth.h> //contains list of this libraries dependencies
 #include <MIDI.h>
 #include "settings.h"
@@ -11,6 +12,7 @@
 void setup()
 {
   pinMode(LED, OUTPUT);
+  pinMode(buttonPin, INPUT);
 
 #if defined(__arm__) && defined(TEENSYDUINO) && defined(USB_MIDI_MODE)
   usbMIDI.setHandleNoteOff(handleNoteOff);
@@ -20,12 +22,12 @@ void setup()
   usbMIDI.setHandlePitchChange(pitchChange);
 #endif
 
-  MIDI.setHandleNoteOff(handleNoteOff);
-  MIDI.setHandleNoteOn(handleNoteOn);
-  MIDI.setHandleControlChange(myControlChange);
-  MIDI.setHandleProgramChange(instrumentChange);
-  MIDI.setHandlePitchBend(pitchChange);
-  MIDI.begin(MIDI_CHANNEL_OMNI);
+  midibench.setHandleNoteOff(handleNoteOff);
+  midibench.setHandleNoteOn(handleNoteOn);
+  midibench.setHandleControlChange(myControlChange);
+  midibench.setHandleProgramChange(instrumentChange);
+  midibench.setHandlePitchBend(pitchChange);
+  midibench.begin(MIDI_CHANNEL_OMNI);
 
   for (int i = 0; i < NUM; i++) {
     mixer.begin(i, pins[i % (sizeof(pins) / sizeof(pins[0]))]);
@@ -57,8 +59,8 @@ void loop()
 #if defined(__arm__) && defined(TEENSYDUINO) && defined(USB_MIDI_MODE)
   usbMIDI.read();
 #endif
-
-  MIDI.read();
+currentWave();
+  midibench.read();
   for (int i = 0; i < NUM; i++) {
 #if defined(VOLUME_VELOCITY) || defined(VOLUME_MIDI) || defined(VOLUME_potentiometer)
     int val = analogRead(potPin);
