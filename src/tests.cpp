@@ -24,63 +24,23 @@
   https://www.arduino.cc/en/Tutorial/BuiltInExamples/StateChangeDetection
 */
 #include <Arduino.h>
-#include <NoodleSynth.h>
 //#include <settings.h>
-#include <MIDI.h>
-
-int voices = 4;
-int usedVoice;
-
-MIDI_CREATE_DEFAULT_INSTANCE();
-synthEngine buzzer;
-
-void handleNoteOn(byte channel, byte pitch, byte velocity)
-{
-  int i;
-  for (i = 0; i < voices; i++)
-  { // find a polyphony instrument that isn't taken at the moment
-    if ((buzzer.getChannel(i) == channel && buzzer.getNote(i) == pitch /* && i == lastUsedVoice*/) || (i != usedVoice && buzzer.getVolume(i) == 0))
-    {
-      break;
-    }
-  }
-  //lastUsedVoice = i;
-  buzzer.setVolume(i,127);//maxVolume
-  buzzer.setNote(i, pitch);
-  buzzer.setChannel(i, channel); // use idle polyphony engines
-  buzzer.mute(i, 0);
-  buzzer.setFrequency(i, buzzer.getNoteAsFrequency(pitch, 0x40));
-  buzzer.setLength(i,128);
-  buzzer.trigger(i);
-
-}
-
-void handleNoteOff(byte channel, byte pitch, byte velocity)
-{
-  for (int i = 0; i < voices; i++)
-  { // find the polyphony instrument that you assigned a channel earlier in noteOn
-    if ((buzzer.getChannel(i) == channel) && (buzzer.getNote(i) == pitch))
-    {
-      buzzer.setLength(i, 0); // ansonsten Artefakte beim loslassen
-      buzzer.mute(i, 1);
-    }
-  }
-}
+#include <callbacks.h>
 
 void setup()
 {
-  // buzzer.begin(SINE, ENVELOPE1, 64);
   MIDI.begin(MIDI_CHANNEL_OMNI);
   MIDI.setHandleNoteOn(handleNoteOn);
   MIDI.setHandleNoteOff(handleNoteOff);
-  // buzzer.setSustain(SUSTAIN);
+  MIDI.setHandlePitchBend(pitchChange);
 
-  for (int i = 0; i < voices; i++)
+
+  for (int i = 0; i < NUM; i++)
   {
-    buzzer.begin(i, CHA);
-    buzzer.setupVoice(i, SINE, 60, ENVELOPE0, 127, 64);
-    buzzer.setChannel(i, 1);
-    buzzer.mute(i,1);
+    mixer.begin(i, CHA);
+    mixer.setupVoice(i, SINE, 60, ENVELOPE0, 127, 64);
+    mixer.setChannel(i, 1);
+    mixer.mute(i,1);
 
   }
 }
@@ -88,10 +48,11 @@ void setup()
 void loop()
 {
   MIDI.read();
-  for (int i = 0; i < 4;i++){
-    if (!buzzer.isMute(i)){
-      buzzer.trigger(i);
+    for (int i = 0; i < NUM; i++){
+    if (!mixer.isMute(i)){
+      mixer.trigger(i);
     }
   }
+
   // buzzer.update();
 }

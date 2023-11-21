@@ -33,10 +33,11 @@ void setup()
   {
     mixer.begin(i, pins[i % (sizeof(pins) / sizeof(pins[0]))]);
     mixer.setupVoice(i, SINE, 60, ENVELOPE0, 127, 64);
-    mixer.setVolume(i, 127);
-#if defined(SUSTAIN_TYPE)
-    mixer.setSustain(i, SUSTAIN_TYPE);
-#endif
+    //mixer.setVolume(i, 127);
+//#if defined(SUSTAIN_TYPE)
+  //  mixer.setSustain(i, SUSTAIN_TYPE);
+//#endif
+    mixer.mute(i,1);
     mixer.setChannel(i, 1);
   }
 #if defined(__AVR_ATmega2560__) || defined(__arm__) && defined(TEENSYDUINO)
