@@ -19,14 +19,13 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
         }
     }
     lastUsedVoice = i;
-    mixer.setVolume(i, 127); // maxVolume
+    mixer.setVolume(i, velocity); // velocity-Sensitive
     mixer.setNote(i, pitch);
     mixer.setChannel(i, channel); // use idle polyphony engines
     mixer.mute(i, 0);
     float freq = synthEngine::getNoteAsFrequency(pitch, tempData[mixer.getChannel(i)].bendFactor);
     mixer.setFrequency(i, freq);
     mixer.setLength(i, 128);
-    // buzzer.trigger(i);
 }
 
 void handleNoteOff(byte channel, byte pitch, byte velocity)
