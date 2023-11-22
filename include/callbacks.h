@@ -19,6 +19,8 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
         }
     }
     lastUsedVoice = i;
+
+    //set parameter
     mixer.setVolume(i, velocity); // velocity-Sensitive
     mixer.setNote(i, pitch);
     mixer.setChannel(i, channel); // use idle polyphony engines
@@ -34,7 +36,7 @@ void handleNoteOff(byte channel, byte pitch, byte velocity)
     { // find the polyphony instrument that you assigned a channel earlier in noteOn
         if ((mixer.getChannel(i) == channel) && (mixer.getNote(i) == pitch))
         {
-            mixer.setLength(i, 0); // ansonsten Artefakte beim loslassen
+            mixer.setLength(i, 15); // ansonsten Artefakte beim loslassen
             mixer.mute(i, 1);
         }
     }

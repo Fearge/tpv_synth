@@ -48,6 +48,7 @@ void setup()
 void loop()
 {
   MIDI.read();
+  currentWave();
     for (int i = 0; i < NUM; i++){
     if (!mixer.isMute(i)){
       mixer.trigger(i);
