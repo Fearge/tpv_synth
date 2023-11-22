@@ -3,10 +3,10 @@
 #include <NoodleSynth.h>
 #include <settings.h>
 
-//MIDI_CREATE_DEFAULT_INSTANCE();
-//synthEngine buzzer;
-//#define VOICES 4 // number of Voices the synth can play
-//int usedVoice = 0;
+// MIDI_CREATE_DEFAULT_INSTANCE();
+// synthEngine buzzer;
+// #define VOICES 4 // number of Voices the synth can play
+// int usedVoice = 0;
 
 void handleNoteOn(byte channel, byte pitch, byte velocity)
 {
@@ -23,7 +23,8 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
     mixer.setNote(i, pitch);
     mixer.setChannel(i, channel); // use idle polyphony engines
     mixer.mute(i, 0);
-    mixer.setFrequency(i, mixer.getNoteAsFrequency2(pitch));
+    float freq = synthEngine::getNoteAsFrequency(pitch, tempData[mixer.getChannel(i)].bendFactor);
+    mixer.setFrequency(i, freq);
     mixer.setLength(i, 128);
     // buzzer.trigger(i);
 }
@@ -42,6 +43,11 @@ void handleNoteOff(byte channel, byte pitch, byte velocity)
 
 void pitchChange(byte channel, int bend)
 {
+#if defined(pitchWheel)
+//no bend
+if(bend == 0x40){
+    //Do Nothing
+}
     int bendFactor = map(bend, -8192, 8192, -4096, 4096);
     for (int i = 0; i < NUM; i++)
     {
@@ -52,7 +58,5 @@ void pitchChange(byte channel, int bend)
             mixer.setFrequency(i, freq);
         }
     }
-#if defined(pitchWheel)
-
 #endif
 }

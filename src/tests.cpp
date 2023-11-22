@@ -38,7 +38,7 @@ void setup()
   for (int i = 0; i < NUM; i++)
   {
     mixer.begin(i, CHA);
-    mixer.setupVoice(i, SINE, 60, ENVELOPE0, 127, 64);
+    mixer.setupVoice(i, SAW, 60, ENVELOPE0, 127, 64);
     mixer.setChannel(i, 1);
     mixer.mute(i,1);
 
@@ -53,6 +53,4 @@ void loop()
       mixer.trigger(i);
     }
   }
-
-  // buzzer.update();
 }
