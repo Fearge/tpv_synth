@@ -25,24 +25,30 @@
 */
 #include <Arduino.h>
 #include <synthEngine.h>
-// this constant won't change:
-const int buttonPin = 2;  // the pin that the pushbutton is attached to
 
-// Variables will change:
-int buttonPushCounter = 0;  // counter for the number of button presses
-int buttonState = 0;        // current state of the button
-int lastButtonState = 0;    // previous state of the button
+#define PAD 0 //Mode for playing long Pads
+#define PLUCK 1 //mode for playing short plucks
+
+//Variables for Waveform Selector
+int wavePin = 12;
+int waveState = 0;        // current state of the button
+int lastWave = 0;    // previous state of the button
 int selectedWave = SINE;
 
+//Variables for Mode Selector
+int modePin = 2;
+int modeState = 0;
+int lastMode;
+int startMode = PAD;
 
-int currentWave(){
+
+void switchButton(int buttonPin,int currentState, int previousState){
   // read the pushbutton input pin:
-  buttonState = digitalRead(buttonPin);
-
+  currentState = digitalRead(buttonPin);
   // compare the buttonState to its previous state
-  if (buttonState != lastButtonState) {
-    // if the state has changed, increment the counter
-    switch (buttonState)
+  if(currentState != previousState){
+     // if the state has changed, increment the counter
+    switch (currentState)
     {
     case HIGH:
         if(selectedWave == SINE){
@@ -54,7 +60,52 @@ int currentWave(){
     default:
         break;
     }
+  }
+  currentState = previousState;
+};
+
+
+int currentWave(){
+  // read the pushbutton input pin:
+  waveState = digitalRead(wavePin);
+
+  // compare the buttonState to its previous state
+  if (waveState != lastWave) {
+    // if the state has changed, increment the counter
+    switch (waveState)
+    {
+    case HIGH:
+        if(selectedWave == SINE){
+        selectedWave = SQUARE;
+      }else selectedWave = SINE;
+        break;
+    
+    default:
+        break;
+    }
   // save the current state as the last state, for next time through the loop
-  lastButtonState = buttonState;
+  waveState = lastWave;
   } return selectedWave;
+}
+
+bool isPluck(){
+    modeState = digitalRead(modePin);
+    bool hasChanged;
+
+  // compare the buttonState to its previous state
+  if (modeState != lastMode) {
+    // if the state has changed, increment the counter
+    switch (modeState)
+    {
+    case HIGH:
+        if(modeState == PAD){
+        hasChanged = 1;
+      }else hasChanged = 0;
+        break;
+    default:
+        break;
+    }
+  // save the current state as the last state, for next time through the loop
+  modeState = lastMode;
+  } return hasChanged;
 }

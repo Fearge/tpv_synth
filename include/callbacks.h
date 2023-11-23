@@ -1,18 +1,19 @@
 #include <MIDI.h>
 #include <synthEngine.h>
 #include <NoodleSynth.h>
-#include <settings.h>//here: change sample rate to 20k for smoother sounds
-
+#include <settings.h> //here: change sample rate to 20k for smoother sounds
+#include <waveSelector.h>
 
 static bool isItMute[maxVOICES];
-bool isMute(unsigned char voice){
-  return isItMute[voice];
+bool isMute(unsigned char voice)
+{
+    return isItMute[voice];
 }
 
-void mute(unsigned char voice, bool m){
-  isItMute[voice]=m;
+void mute(unsigned char voice, bool m)
+{
+    isItMute[voice] = m;
 }
-
 
 void handleNoteOn(byte channel, byte pitch, byte velocity)
 {
@@ -26,14 +27,21 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
     }
     lastUsedVoice = i;
 
-    //set parameter
+    // set parameter
     mixer.setVolume(i, velocity); // velocity-Sensitive
     mixer.setNote(i, pitch);
     mixer.setChannel(i, channel); // use idle polyphony engines
-    mute(i, 0);
-    float freq = synthEngine::getNoteAsFrequency(pitch, tempData[mixer.getChannel(i)].bendFactor);
-    mixer.setFrequency(i, freq);
-    mixer.setLength(i, 128);
+    if (isPluck())
+    {
+        mixer.mTrigger(i, pitch);
+    }
+    else
+    {
+        mute(i, 0);
+        float freq = synthEngine::getNoteAsFrequency(pitch, tempData[mixer.getChannel(i)].bendFactor);
+        mixer.setFrequency(i, freq);
+        mixer.setLength(i, 128);
+    }
 }
 
 void handleNoteOff(byte channel, byte pitch, byte velocity)
@@ -51,10 +59,11 @@ void handleNoteOff(byte channel, byte pitch, byte velocity)
 void pitchChange(byte channel, int bend)
 {
 #if defined(pitchWheel)
-//no bend
-if(bend == 0x40){
-    //Do Nothing
-}
+    // no bend
+    if (bend == 0x40)
+    {
+        // Do Nothing
+    }
     int bendFactor = map(bend, -8192, 8192, -4096, 4096);
     for (int i = 0; i < NUM; i++)
     {
