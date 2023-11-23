@@ -24,33 +24,35 @@
   https://www.arduino.cc/en/Tutorial/BuiltInExamples/StateChangeDetection
 */
 #include <Arduino.h>
-//#include <settings.h>
+#include <Noodles_Settings.h>//change voices to 4, for better performance, especially on pitchbend
 #include <callbacks.h>
+#include <waveSelector.h>
+
 
 void setup()
 {
-  MIDI.begin(MIDI_CHANNEL_OMNI);
-  MIDI.setHandleNoteOn(handleNoteOn);
-  MIDI.setHandleNoteOff(handleNoteOff);
-  MIDI.setHandlePitchBend(pitchChange);
+  midibench.begin(MIDI_CHANNEL_OMNI);
+  midibench.setHandleNoteOn(handleNoteOn);
+  midibench.setHandleNoteOff(handleNoteOff);
+  midibench.setHandlePitchBend(pitchChange);
 
 
   for (int i = 0; i < NUM; i++)
   {
     mixer.begin(i, CHA);
-    mixer.setupVoice(i, SAW, 60, ENVELOPE0, 127, 64);
+    mixer.setupVoice(i, SAW, 60, ENVELOPE1, 127, 64);
     mixer.setChannel(i, 1);
-    mixer.mute(i,1);
+    mute(i,1);
 
   }
 }
 
 void loop()
 {
-  MIDI.read();
+  midibench.read();
   currentWave();
     for (int i = 0; i < NUM; i++){
-    if (!mixer.isMute(i)){
+    if (!isMute(i)){
       mixer.trigger(i);
     }
   }

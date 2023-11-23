@@ -34,6 +34,7 @@ int buttonState = 0;        // current state of the button
 int lastButtonState = 0;    // previous state of the button
 int selectedWave = SINE;
 
+
 int currentWave(){
   // read the pushbutton input pin:
   buttonState = digitalRead(buttonPin);

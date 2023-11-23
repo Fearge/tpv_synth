@@ -1,12 +1,18 @@
 #include <MIDI.h>
 #include <synthEngine.h>
 #include <NoodleSynth.h>
-#include <settings.h>
+#include <settings.h>//here: change sample rate to 20k for smoother sounds
 
-// MIDI_CREATE_DEFAULT_INSTANCE();
-// synthEngine buzzer;
-// #define VOICES 4 // number of Voices the synth can play
-// int usedVoice = 0;
+
+static bool isItMute[maxVOICES];
+bool isMute(unsigned char voice){
+  return isItMute[voice];
+}
+
+void mute(unsigned char voice, bool m){
+  isItMute[voice]=m;
+}
+
 
 void handleNoteOn(byte channel, byte pitch, byte velocity)
 {
@@ -24,7 +30,7 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
     mixer.setVolume(i, velocity); // velocity-Sensitive
     mixer.setNote(i, pitch);
     mixer.setChannel(i, channel); // use idle polyphony engines
-    mixer.mute(i, 0);
+    mute(i, 0);
     float freq = synthEngine::getNoteAsFrequency(pitch, tempData[mixer.getChannel(i)].bendFactor);
     mixer.setFrequency(i, freq);
     mixer.setLength(i, 128);
@@ -37,7 +43,7 @@ void handleNoteOff(byte channel, byte pitch, byte velocity)
         if ((mixer.getChannel(i) == channel) && (mixer.getNote(i) == pitch))
         {
             mixer.setLength(i, 15); // ansonsten Artefakte beim loslassen
-            mixer.mute(i, 1);
+            mute(i, 1);
         }
     }
 }
