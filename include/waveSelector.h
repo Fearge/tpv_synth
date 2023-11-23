@@ -30,40 +30,16 @@
 #define PLUCK 1 //mode for playing short plucks
 
 //Variables for Waveform Selector
-int wavePin = 12;
+const int wavePin = 12;
 int waveState = 0;        // current state of the button
 int lastWave = 0;    // previous state of the button
 int selectedWave = SINE;
 
 //Variables for Mode Selector
-int modePin = 2;
+const int modePin = 2;
 int modeState = 0;
 int lastMode;
 int startMode = PAD;
-
-
-void switchButton(int buttonPin,int currentState, int previousState){
-  // read the pushbutton input pin:
-  currentState = digitalRead(buttonPin);
-  // compare the buttonState to its previous state
-  if(currentState != previousState){
-     // if the state has changed, increment the counter
-    switch (currentState)
-    {
-    case HIGH:
-        if(selectedWave == SINE){
-        selectedWave = SQUARE;
-      }else selectedWave = SINE;
-        /* code */
-        break;
-    
-    default:
-        break;
-    }
-  }
-  currentState = previousState;
-};
-
 
 int currentWave(){
   // read the pushbutton input pin:
@@ -84,7 +60,7 @@ int currentWave(){
         break;
     }
   // save the current state as the last state, for next time through the loop
-  waveState = lastWave;
+  lastWave = waveState;
   } return selectedWave;
 }
 

@@ -27,8 +27,10 @@
 #include <Noodles_Settings.h> //change voices to 4, for better performance, especially on pitchbend
 #include <callbacks.h>
 
+
 void setup()
 {
+  pinMode(wavePin,INPUT);
   midibench.begin(MIDI_CHANNEL_OMNI);
   midibench.setHandleNoteOn(handleNoteOn);
   midibench.setHandleNoteOff(handleNoteOff);
@@ -37,7 +39,7 @@ void setup()
   for (int i = 0; i < NUM; i++)
   {
     mixer.begin(i, CHA);
-    mixer.setupVoice(i, SAW, 60, ENVELOPE1, 127, 64);
+    mixer.setupVoice(i, SINE, 60, ENVELOPE0, 127, 64);
     mixer.setChannel(i, 1);
     mute(i, 1);
   }
@@ -45,11 +47,10 @@ void setup()
 
 void loop()
 {
+  waveform = currentWave();
   midibench.read();
-  
-  //currentWave();
   for (int i = 0; i < NUM; i++)
-  {mixer.setWave(i, currentWave());
+  {
     if (!isMute(i))
     {
       mixer.trigger(i);

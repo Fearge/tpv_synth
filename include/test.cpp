@@ -2,6 +2,7 @@
 int pin = 12;
 int currState = 0;
 int prevState;
+char letterToPrint = 'a';
 
 void setup()
 {
@@ -18,21 +19,17 @@ void loop()
     if (currState != prevState)
     {
         // if the state has changed, increment the counter
-        switch (currState)
+        if (currState == HIGH)
         {
-        case HIGH:
-            if (currState == 0)
+            if (letterToPrint == 'a')
             {
-                Serial.println('a');
+                letterToPrint = 'b';
             }
             else
-                Serial.println('b');
-            break;
-
-        default:
-            break;
+                letterToPrint = 'a';
         }
         // save the current state as the last state, for next time through the loop
-        currState = prevState;
     }
+    Serial.println(letterToPrint);
+    prevState = currState;
 };

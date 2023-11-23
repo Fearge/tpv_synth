@@ -2,7 +2,9 @@
 #include <synthEngine.h>
 #include <NoodleSynth.h>
 #include <settings.h> //here: change sample rate to 20k for smoother sounds
-#include <waveSelector.h>
+#include <Noodles_Settings.h>
+
+int waveform = 0;
 
 static bool isItMute[maxVOICES];
 bool isMute(unsigned char voice)
@@ -28,20 +30,15 @@ void handleNoteOn(byte channel, byte pitch, byte velocity)
     lastUsedVoice = i;
 
     // set parameter
-    mixer.setVolume(i, velocity); // velocity-Sensitive
+    mixer.setVolume(i, 127);
     mixer.setNote(i, pitch);
     mixer.setChannel(i, channel); // use idle polyphony engines
-    if (isPluck())
-    {
-        mixer.mTrigger(i, pitch);
-    }
-    else
-    {
-        mute(i, 0);
-        float freq = synthEngine::getNoteAsFrequency(pitch, tempData[mixer.getChannel(i)].bendFactor);
-        mixer.setFrequency(i, freq);
-        mixer.setLength(i, 128);
-    }
+    mixer.setWave(i, waveform);
+    mute(i, 0);
+    float freq = synthEngine::getNoteAsFrequency(pitch, tempData[mixer.getChannel(i)].bendFactor);
+    mixer.setFrequency(i, freq);
+    mixer.setLength(i, 128);
+    mixer.trigger(i);
 }
 
 void handleNoteOff(byte channel, byte pitch, byte velocity)
