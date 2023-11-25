@@ -727,7 +727,3 @@ float synthEngine::getNoteAsFrequency(int n, int pitchBend){
   return 440 * pow(twelveRoot, (n - 69 + pitchOffset)) * pow(pitchBendRoot, pitchBend);
   ;
 }
-float synthEngine::getNoteAsFrequency2(int n){
-  return 440 * pow(twelveRoot,(n-69));
-
-}

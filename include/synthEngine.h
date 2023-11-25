@@ -78,7 +78,6 @@ public:
   int getChannel(unsigned char voice);
   int getSustain(unsigned char voice);
   bool isPedalSustain(unsigned char voice);
-  float getNoteAsFrequency2 (int n);
 private:
   static float FS_music;
 };
