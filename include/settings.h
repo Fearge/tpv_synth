@@ -38,7 +38,7 @@ synthEngine mixer(20E3); //10E3
 
 /////-----MIDI Serial------////////////
 #if defined(__AVR_ATmega2560__)//Arduino Mega
-MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midibench); //Connect your MIDI's RX,TX to the assigned Serial1.
+MIDI_CREATE_DEFAULT_INSTANCE();
 #elif defined(AVR)  //Arduino Uno/Mini etc
 MIDI_CREATE_DEFAULT_INSTANCE();
 //MIDI_CREATE_INSTANCE(HardwareSerial, Serial, midibench);

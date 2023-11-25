@@ -39,7 +39,7 @@ void setup()
   for (int i = 0; i < NUM; i++)
   {
     mixer.begin(i, CHA);
-    mixer.setupVoice(i, SAW, 60, ENVELOPE1, 127, 64);
+    mixer.setupVoice(i, SINE, 60, ENVELOPE1, 127, 64);
     mixer.setChannel(i, 1);
     mixer.mute(i, 1);
   }

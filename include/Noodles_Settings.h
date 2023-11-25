@@ -21,7 +21,7 @@
 #error "Hey! This library isn't compatible with this board" //other unknown boards
 #endif
 /***end of MaxVoice settings****/
-#define pitchOffset 1
+#define pitchOffset 4
 /*-----------------------------------------------------------------------------------------------------------------*/
 /*****ATmega328p only*****
 * For some boards, if your SD card's pins take the audio pin, then uncomment the "USE_TIMER1".
