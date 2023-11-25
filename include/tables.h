@@ -1,16 +1,12 @@
 //  Tables V2
 
+#include "Arduino.h"
 #ifndef _TABLES
 #define _TABLES
 
 //This table id compatible with 20000.00 Hz. sampling rate
 //Envelope frequency tuning word vs. MIDI range value [0-127]
-#if defined(ESP32)
-const uint16_t EFTWS[]=
-#else
-const uint16_t PROGMEM EFTWS[]=
-#endif
-{
+const uint16_t PROGMEM EFTWS[]={
 0x0371,0x0340,0x0311,0x02E5,0x02BB,0x0294,0x026F,0x024C,0x022B,0x020C,0x01EE,0x01D3,0x01B8,0x01A0,0x0188,0x0172,
 0x015D,0x014A,0x0137,0x0126,0x0115,0x0106,0x00F7,0x00E9,0x00DC,0x00D0,0x00C4,0x00B9,0x00AE,0x00A5,0x009B,0x0093,
 0x008A,0x0083,0x007B,0x0074,0x006E,0x0068,0x0062,0x005C,0x0057,0x0052,0x004D,0x0049,0x0045,0x0041,0x003D,0x003A,
@@ -22,12 +18,7 @@ const uint16_t PROGMEM EFTWS[]=
 };
 
 //Voice frequency tuning word vs. MIDI note [0-127]
-#if defined(ESP32)
-const uint16_t PITCHS[]=
-#else
-const uint16_t PROGMEM PITCHS[]=
-#endif
-{
+const uint16_t PROGMEM PITCHS[]={
 0x001A,0x001C,0x001E,0x001F,0x0021,0x0023,0x0025,0x0028,0x002A,0x002D,0x002F,0x0032,0x0035,0x0038,0x003C,0x003F,
 0x0043,0x0047,0x004B,0x0050,0x0055,0x005A,0x005F,0x0065,0x006B,0x0071,0x0078,0x007F,0x0087,0x008F,0x0097,0x00A0,
 0x00AA,0x00B4,0x00BE,0x00CA,0x00D6,0x00E3,0x00F0,0x00FE,0x010E,0x011E,0x012F,0x0141,0x0154,0x0168,0x017D,0x0194,
@@ -38,11 +29,33 @@ const uint16_t PROGMEM PITCHS[]=
 0x4381,0x4785,0x4BC6,0x5047,0x550D,0x5A1C,0x5F78,0x6525,0x6B29,0x7188,0x7848,0x7F6F,0x8703,0x8F0A,0x978C,0xA08F,
 };
 
-#if defined(ESP32)
-const int8_t SinTable[]=
-#else
-const int8_t PROGMEM SinTable[]=
-#endif
+/*
+//Arduino synth V4.0
+//This table id compatible with 16000.00 Hz. sampling rate
+//Envelope frequency tuning word vs. MIDI range value [0-127]
+const uint16_t PROGMEM EFTWS[]={
+0x044E,0x0410,0x03D5,0x039E,0x036A,0x0339,0x030B,0x02DF,0x02B6,0x028F,0x026A,0x0247,0x0227,0x0208,0x01EA,0x01CF,
+0x01B5,0x019C,0x0185,0x016F,0x015B,0x0147,0x0135,0x0123,0x0113,0x0104,0x00F5,0x00E7,0x00DA,0x00CE,0x00C2,0x00B7,
+0x00AD,0x00A3,0x009A,0x0091,0x0089,0x0082,0x007A,0x0073,0x006D,0x0067,0x0061,0x005B,0x0056,0x0051,0x004D,0x0048,
+0x0044,0x0041,0x003D,0x0039,0x0036,0x0033,0x0030,0x002D,0x002B,0x0028,0x0026,0x0024,0x0022,0x0020,0x001E,0x001C,
+0x001B,0x0019,0x0018,0x0016,0x0015,0x0014,0x0013,0x0012,0x0011,0x0010,0x000F,0x000E,0x000D,0x000C,0x000C,0x000B,
+0x000A,0x000A,0x0009,0x0009,0x0008,0x0008,0x0007,0x0007,0x0006,0x0006,0x0006,0x0005,0x0005,0x0005,0x0004,0x0004,
+0x0004,0x0004,0x0003,0x0003,0x0003,0x0003,0x0003,0x0002,0x0002,0x0002,0x0002,0x0002,0x0002,0x0002,0x0001,0x0001,
+0x0001,0x0001,0x0001,0x0001,0x0001,0x0001,0x0001,0x0001,0x0001,0x0001,0x0000,0x0000,0x0000,0x0000,0x0000,0x0000,
+};
+//Voice frequency tuning word vs. MIDI note [0-127]
+const uint16_t PROGMEM PITCHS[]={
+0x0021,0x0023,0x0025,0x0027,0x002A,0x002C,0x002F,0x0032,0x0035,0x0038,0x003B,0x003F,0x0042,0x0046,0x004B,0x004F,
+0x0054,0x0059,0x005E,0x0064,0x006A,0x0070,0x0077,0x007E,0x0085,0x008D,0x0096,0x009F,0x00A8,0x00B2,0x00BD,0x00C8,
+0x00D4,0x00E1,0x00EE,0x00FC,0x010B,0x011B,0x012C,0x013E,0x0151,0x0165,0x017A,0x0191,0x01A9,0x01C2,0x01DD,0x01F9,
+0x0217,0x0237,0x0259,0x027D,0x02A3,0x02CB,0x02F5,0x0322,0x0352,0x0385,0x03BA,0x03F3,0x042F,0x046F,0x04B2,0x04FA,
+0x0546,0x0596,0x05EB,0x0645,0x06A5,0x070A,0x0775,0x07E6,0x085F,0x08DE,0x0965,0x09F4,0x0A8C,0x0B2C,0x0BD6,0x0C8B,
+0x0D4A,0x0E14,0x0EEA,0x0FCD,0x10BE,0x11BD,0x12CB,0x13E9,0x1518,0x1659,0x17AD,0x1916,0x1A94,0x1C28,0x1DD5,0x1F9B,
+0x217C,0x237A,0x2596,0x27D2,0x2A31,0x2CB3,0x2F5B,0x322C,0x3528,0x3851,0x3BAB,0x3F37,0x42F9,0x46F5,0x4B2D,0x4FA5,
+0x5462,0x5966,0x5EB7,0x6459,0x6A50,0x70A3,0x7756,0x7E6E,0x85F3,0x8DEA,0x965A,0x9F4B,0xA8C4,0xB2CD,0xBD6F,0xC8B2,
+};
+*/
+signed const PROGMEM char SinTable[]=
 {
 	0,	//0
 	3,	//1
@@ -299,14 +312,10 @@ const int8_t PROGMEM SinTable[]=
 	-12,	//252
 	-9,	//253
 	-6,	//254
-	-4,	//255
+	-3,	//255
 };
 
-#if defined(ESP32)
-const int8_t TriangleTable[]=
-#else
-const int8_t PROGMEM TriangleTable[]=
-#endif
+signed const PROGMEM char TriangleTable[]=
 {
 	0,	//0
 	1,	//1
@@ -566,11 +575,7 @@ const int8_t PROGMEM TriangleTable[]=
 	-2,	//255
 };
 
-#if defined(ESP32)
-const int8_t SquareTable[]=
-#else
-const int8_t PROGMEM  SquareTable[]=
-#endif
+signed const PROGMEM char  SquareTable[]=
 {
 	127,	//0
 	127,	//1
@@ -829,14 +834,9 @@ const int8_t PROGMEM  SquareTable[]=
 	-125,	//254
 	-1,	//255
 };
-
-#if defined(ESP32)
-const int8_t SawTable[]=
-#else
-const int8_t PROGMEM SawTable[]=
-#endif
+signed const PROGMEM char SawTable[]=
 {
-	127,	//0
+	0,	//0
 	127,	//1
 	126,	//2
 	125,	//3
@@ -1094,11 +1094,7 @@ const int8_t PROGMEM SawTable[]=
 	-127,	//255
 };
 
-#if defined(ESP32)
-const int8_t RampTable[]=
-#else
-const int8_t PROGMEM RampTable[]=
-#endif
+signed const PROGMEM char RampTable[]=
 {
 	-127,	//0
 	-126,	//1
@@ -1357,12 +1353,7 @@ const int8_t PROGMEM RampTable[]=
 	126,	//254
 	127,	//255
 };
-
-#if defined(ESP32)
-const int8_t NoiseTable[]=
-#else
-const int8_t PROGMEM NoiseTable[]=
-#endif
+signed const PROGMEM char NoiseTable[]=
 {
 	-62,	//0
 	-72,	//1
@@ -1621,12 +1612,7 @@ const int8_t PROGMEM NoiseTable[]=
 	112,	//254
 	119,	//255
 };
-
-#if defined(ESP32)
-const uint8_t Env0[]=
-#else
-const uint8_t PROGMEM Env0[]=
-#endif
+unsigned const PROGMEM char Env0[]=
 {
 	255,	//0
 	254,	//1
@@ -1759,12 +1745,7 @@ const uint8_t PROGMEM Env0[]=
 	0,	//127
 	0,	//127
 };
-
-#if defined(ESP32)
-const uint8_t Env1[]=
-#else
-const uint8_t PROGMEM Env1[]=
-#endif
+unsigned const PROGMEM char Env1[]=
 {
 	255,	//0
 	242,	//1
@@ -1898,12 +1879,7 @@ const uint8_t PROGMEM Env1[]=
 	0,	//127
 	0,	//127
 };
-
-#if defined(ESP32)
-const uint8_t Env2[]=
-#else
-const uint8_t PROGMEM Env2[]=
-#endif
+unsigned const PROGMEM char Env2[]=
 {
 	255,	//0
 	254,	//1
@@ -2038,143 +2014,140 @@ const uint8_t PROGMEM Env2[]=
 	0,	//127
 };
 
-#if defined(ESP32)
-const uint8_t Env3[]=
-#else
-const uint8_t PROGMEM Env3[]=
-#endif
+
+unsigned const PROGMEM char Env3[]=
 {
 	255,	//0
-	250,	//1
-	246,	//2
-	242,	//3
-	238,	//4
-	233,	//5
-	229,	//6
-	225,	//7
-	221,	//8
-	217,	//9
-	213,	//10
-	209,	//11
-	206,	//12
-	202,	//13
-	199,	//14
-	195,	//15
-	191,	//16
-	188,	//17
-	183,	//18
-	179,	//19
-	175,	//20
-	170,	//21
-	166,	//22
-	161,	//23
-	157,	//24
-	153,	//25
-	148,	//26
-	144,	//27
-	139,	//28
-	134,	//29
-	130,	//30
-	125,	//31
-	121,	//32
-	116,	//33
-	112,	//34
-	109,	//35
-	105,	//36
-	102,	//37
-	99,	//38
-	96,	//39
-	93,	//40
-	90,	//41
-	87,	//42
-	83,	//43
-	80,	//44
-	77,	//45
-	74,	//46
-	71,	//47
-	68,	//48
-	65,	//49
-	61,	//50
-	58,	//51
-	56,	//52
-	54,	//53
-	51,	//54
-	49,	//55
-	46,	//56
-	44,	//57
-	42,	//58
-	39,	//59
-	37,	//60
-	34,	//61
-	31,	//62
-	28,	//63
-	25,	//64
-	22,	//65
-	19,	//66
-	16,	//67
-	13,	//68
-	12,	//69
-	12,	//70
-	11,	//71
-	11,	//72
-	10,	//73
-	10,	//74
-	10,	//75
-	9,	//76
-	9,	//77
-	8,	//78
-	8,	//79
-	8,	//80
-	7,	//81
-	7,	//82
-	6,	//83
-	6,	//84
-	6,	//85
-	6,	//86
-	6,	//87
-	5,	//88
-	5,	//89
-	5,	//90
-	5,	//91
-	5,	//92
-	5,	//93
-	5,	//94
-	5,	//95
-	5,	//96
-	4,	//97
-	4,	//98
-	4,	//99
-	4,	//100
-	4,	//101
-	4,	//102
-	3,	//103
-	3,	//104
-	3,	//105
-	2,	//106
-	2,	//107
-	2,	//108
-	1,	//109
-	1,	//110
-	1,	//111
-	1,	//112
-	1,	//113
-	0,	//114
-	0,	//115
-	0,	//116
-	0,	//117
-	0,	//118
-	0,	//119
-	0,	//120
-	0,	//121
-	0,	//122
-	0,	//123
-	0,	//124
-	0,	//125
-	0,	//126
-	0,	//127
-	0,	//127
-	0,	//127
-	0,	//127
+	255,	//1
+	255,	//2
+	255,	//3
+	255,	//4
+	255,	//5
+	255,	//6
+	255,	//7
+	255,	//8
+	255,	//9
+	255,	//10
+	255,	//11
+	255,	//12
+	255,	//13
+	255,	//14
+	255,	//15
+	255,	//16
+	255,	//17
+	255,	//18
+	255,	//19
+	255,	//20
+	255,	//21
+	255,	//22
+	255,	//23
+	255,	//24
+	255,	//25
+	255,	//26
+	255,	//27
+	255,	//28
+	255,	//29
+	255,	//30
+	255,	//31
+	255,	//32
+	255,	//33
+	255,	//34
+	255,	//35
+	255,    //36
+	255,	//37
+	255,	//38
+	255,	//39
+	255,	//40
+	255,	//41
+	255,	//42
+	255,	//43
+	255,	//44
+	255,	//45
+	255,	//46
+	255,	//47
+	255,	//48
+	255,	//49
+	255,	//50
+	255,	//51
+	255,	//52
+	255,	//53
+	255,	//54
+	255,	//55
+	255,	//56
+	255,	//57
+	255,	//58
+	255,	//59
+	255,	//60
+	255,	//61
+	255,	//62
+	255,	//63
+	255,	//64
+	255,	//65
+	255,	//66
+	255,	//67
+	255,	//68
+	255,	//69
+	255,	//70
+	255,	//71
+	255,	//72
+	255,	//73
+	255,	//74
+	255,	//75
+	255,	//76
+	255,	//77
+	255,	//78
+	255,	//79
+	255,	//80
+	255,	//81
+	255,	//82
+	255,	//83
+	255,	//84
+	255,	//85
+	255,	//86
+	255,	//87
+	255,	//88
+	255,	//89
+	255,	//90
+	255,	//91
+	255,	//92
+	255,	//93
+	255,	//94
+	255,	//95
+	255,	//96
+	255,	//97
+	255,	//98
+	255,	//99
+	255,	//100
+	255,	//101
+	255,	//102
+	255,	//103
+	255,	//104
+	255,	//105
+	255,	//106
+	255,	//107
+	255,	//108
+	255,	//109
+	255,	//110
+	255,	//111
+	255,	//112
+	255,	//113
+	255,	//114
+	255,	//115
+	255,	//116
+	255,	//117
+	255,	//118
+	255,	//119
+	255,	//120
+	255,	//121
+	255,	//122
+	255,	//123
+	255,	//124
+	255,	//125
+	255,	//126
+	255,	//127
+	255,	//127
+	255,	//127
+	255,	//127
 
 };
 

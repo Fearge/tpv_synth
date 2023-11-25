@@ -25,6 +25,7 @@ static unsigned int sustainIt[maxVOICES];//sustain variables
 static unsigned int revSustain[maxVOICES];//sustain variables
 static unsigned int volume[maxVOICES];//volume variables
 static unsigned int numVoice;
+static bool isItMute[maxVOICES];
 
 #if defined(__AVR_ATmega32U4__)
 #  if defined(CORE_TEENSY)  //Teensy 2.0
@@ -691,6 +692,11 @@ void synthEngine::setPedalSustain(unsigned char voice, bool pedalPressed){
 void synthEngine::setNote(unsigned char voice, int noteValue){
   currentNote[voice] = noteValue+pitchOffset;
 }
+
+void synthEngine::mute(unsigned char voice, bool m){
+  isItMute[voice]=m;
+}
+
 int synthEngine::getVolume(unsigned char voice){
   return AMP[voice];
 }
@@ -709,10 +715,19 @@ int synthEngine::getSustain(unsigned char voice){
 bool synthEngine::isPedalSustain(unsigned char voice){
   return pedalSustain[voice];
 }
+
+bool synthEngine::isMute(unsigned char voice){
+  return isItMute[voice];
+}
+
 int synthEngine::getWave(unsigned char voice){
   return wavForm[voice];
 }
 float synthEngine::getNoteAsFrequency(int n, int pitchBend){
   return 440 * pow(twelveRoot, (n - 69 + pitchOffset)) * pow(pitchBendRoot, pitchBend);
   ;
+}
+float synthEngine::getNoteAsFrequency2(int n){
+  return 440 * pow(twelveRoot,(n-69));
+
 }

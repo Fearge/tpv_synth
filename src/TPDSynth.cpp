@@ -30,28 +30,30 @@
 
 void setup()
 {
-  pinMode(wavePin,INPUT);
-  midibench.begin(MIDI_CHANNEL_OMNI);
-  midibench.setHandleNoteOn(handleNoteOn);
-  midibench.setHandleNoteOff(handleNoteOff);
-  midibench.setHandlePitchBend(pitchChange);
+ // pinMode(wavePin,INPUT);
+  MIDI.begin(MIDI_CHANNEL_OMNI);
+  MIDI.setHandleNoteOn(handleNoteOn);
+  MIDI.setHandleNoteOff(handleNoteOff);
+  MIDI.setHandlePitchBend(pitchChange);
 
   for (int i = 0; i < NUM; i++)
   {
     mixer.begin(i, CHA);
-    mixer.setupVoice(i, SINE, 60, ENVELOPE0, 127, 64);
+    mixer.setupVoice(i, SAW, 60, ENVELOPE0, 127, 64);
     mixer.setChannel(i, 1);
-    mute(i, 1);
+    mixer.mute(i, 1);
   }
 }
 
 void loop()
 {
-  waveform = currentWave();
-  midibench.read();
+  //waveform = currentWave();
+  //mixer.setFrequency(0,880);
+  //mixer.trigger(0);
+  MIDI.read();
   for (int i = 0; i < NUM; i++)
   {
-    if (!isMute(i))
+    if (!mixer.isMute(i))
     {
       mixer.trigger(i);
     }

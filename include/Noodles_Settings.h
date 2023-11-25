@@ -5,7 +5,7 @@
 #define pitchBendRoot 1.0001693  // after many tests, this number is what I found most accurate
 
 //default sample rate(this is used when user doesn't specify the sample rate)
-#define default_sample_rate 20E3 //20,000 Hz
+#define default_sample_rate 40E3 //20,000 Hz
 /*****maxVOICES settings (These settings are used when the user doesn't specify how many note polyphony they want)***/
 #if defined(__AVR_ATmega2560__)
 #define maxVOICES 16  //Arduino Mega2560; best performance would be 8

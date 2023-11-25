@@ -1,17 +1,16 @@
 /*
    Note: USB MIDI can handle way more polyphony than MIDI over Serial.
 */
+////////////////////////////////////////////////////////-------Settings------//////////////////////////////////////////////////////////////////
 #include <waveSelector.h>
 #include <MIDI.h>
-////////////////////////////////////////////////////////-------Settings------//////////////////////////////////////////////////////////////////
-
 /////-----Optional------////////////
 //#define DEBUG //Comment out to remove Serial Debugging
 
-//#define SPECIFIC_WAVE_ONLY RAMP //comment this out to allow different types of waveforms instead of one waveform.(SINE, TRIANGLE, RAMP, SQUARE)
+//#define SPECIFIC_WAVE_ONLY SINE //comment this out to allow different types of waveforms instead of one waveform.(SINE, TRIANGLE, RAMP, SQUARE)
 //#define INFINITE      //comment this out to remove the infinite effect(Only works for Sustain_type = NONE)
 #define pitchWheel   //comment this out to remove pitchWheel.  this can lag the system on the UNO.
-#define pedalSustain  //comment this out to remove pedal sustain(**the pedal you use on your piano to make your notes sound longer**)
+//#define pedalSustain  //comment this out to remove pedal sustain(**the pedal you use on your piano to make your notes sound longer**)
 
 #define VOLUME_potentiometer //**recommended** this allows you to control the volume with a pot
 //#define VOLUME_VELOCITY //**This needs improvement** this allows the volume to be determined by your velocity of your keypress. The potentiometer acts as Master Volume
@@ -41,7 +40,8 @@ synthEngine mixer(20E3); //10E3
 #if defined(__AVR_ATmega2560__)//Arduino Mega
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midibench); //Connect your MIDI's RX,TX to the assigned Serial1.
 #elif defined(AVR)  //Arduino Uno/Mini etc
-MIDI_CREATE_INSTANCE(HardwareSerial, Serial, midibench);
+MIDI_CREATE_DEFAULT_INSTANCE();
+//MIDI_CREATE_INSTANCE(HardwareSerial, Serial, midibench);
 #else  //Teensy or others
 MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midibench);
 #endif
@@ -50,7 +50,7 @@ MIDI_CREATE_INSTANCE(HardwareSerial, Serial1, midibench);
 #if defined(__arm__) && defined(TEENSYDUINO) //TEENSY
 int pins[] = {5, 6, 9}; //speaker audio pins
 #else //Arduino UNO/MEGA/NANO
-int pins[] = {CHB}; //speaker audio pins
+int pins[] = {CHA}; //speaker audio pins
 #endif
 const int LED = 13; // LED pin
 ///////////////////////////////---------------------------End of Settings-------------------------------------/////////////////////////////////
@@ -60,6 +60,7 @@ const int LED = 13; // LED pin
 const int NumChannels = (NUM > 16) ? 16 : NUM; //number of channels used in your song, max is usually 16.  Keeping this small is best when you want more polyphony per channel
 int masterVolume = 127;
 int lastUsedVoice = 0;
+bool isMute = 0;
 #define percussionChannel 10
 struct storedMIDI {
 bool isPedalSustain = false;
@@ -68,7 +69,7 @@ int currentVolume = 127;
 #if defined(SPECIFIC_WAVE_ONLY)
 int waveForm = SPECIFIC_WAVE_ONLY;
 #else
-int waveForm = currentWave();
+int waveForm = SINE;
 #endif
 };
 storedMIDI tempData[NumChannels];

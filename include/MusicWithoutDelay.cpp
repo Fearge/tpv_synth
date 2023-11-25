@@ -859,6 +859,24 @@ MusicWithoutDelay& MusicWithoutDelay::setVolume(int volume){
   return *this;
 }
 
+MusicWithoutDelay& MusicWithoutDelay::setEnvelope(char env){
+  noodleSynth->setEnvelope(myInstrument,env);
+  return *this;
+}
+
+MusicWithoutDelay& MusicWithoutDelay::setLength(int length){
+  noodleSynth->setLength(myInstrument, length);
+}
+
+MusicWithoutDelay& MusicWithoutDelay::setUpVoice(unsigned char voice, unsigned char wave, unsigned char pitch, unsigned char env, unsigned char length, unsigned int mod){
+  noodleSynth->setupVoice(voice, wave, pitch, env, length, mod);
+}
+
+float MusicWithoutDelay::getMidiNoteAsFrequency(byte pitch){
+   noodleSynth->setNote(myInstrument, pitch);
+  return synthEngine::getNoteAsFrequency(pitch, 0x40);
+}
+
 bool MusicWithoutDelay::isMuted(){
   return isMute;
 }

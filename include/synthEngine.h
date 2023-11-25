@@ -68,8 +68,9 @@ public:
   void setSustain(unsigned char voice, int v);
   void setChannel(unsigned char voice, int channel);
   void setPedalSustain(unsigned char voice, bool pedalPressed);
+  void mute(unsigned char voice, bool m);
   static float getNoteAsFrequency(int n, int pitchBend);
-
+  bool isMute(unsigned char voice);
   int getWave(unsigned char voice);
   int getAvailablePiston();
   int getVolume(unsigned char voice);
@@ -77,6 +78,7 @@ public:
   int getChannel(unsigned char voice);
   int getSustain(unsigned char voice);
   bool isPedalSustain(unsigned char voice);
+  float getNoteAsFrequency2 (int n);
 private:
   static float FS_music;
 };
